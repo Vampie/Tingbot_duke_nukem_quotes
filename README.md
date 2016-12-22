@@ -20,7 +20,7 @@ Pressing the left button stops the interval.
 There you can use the mid left and right to scroll the list.
 Left button goes back, right button shows the quote.
 
-Long press the left buttin again to go back to the interval mode.
+Long press the left button again to go back to the interval mode.
 
 -----
 
