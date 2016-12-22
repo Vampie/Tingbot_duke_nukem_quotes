@@ -139,7 +139,7 @@ def main():
                 state['lastquotetime'] = time.time()
             intervaltext = ("interval = %i seconds"% intervals[intervalposition])
         else:
-            intervaltext = "Pause"
+            intervaltext = "Paused"
 
         screen.rectangle(xy=(0,helpers.screen_height()), size=(helpers.screen_width(),25), color=state['backgroundcolor'],align='bottomleft')
         screen.text(intervaltext,color=state['foregroundcolor'],xy=(0,helpers.screen_height()), font_size=20,align='bottomleft')
