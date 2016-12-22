@@ -24,6 +24,8 @@ intervaltext = ""
 with open('duke_nukem_quotes.json') as json_data:
     quotes = json.load(json_data)
     #print(quotes)
+temp_quotes = list(quotes)
+random.shuffle(temp_quotes) 
 
 #define intervallist
 intervalposition = 2
@@ -121,13 +123,18 @@ def random_quote():
 #loop
 @every(seconds=1/100)
 def main():
-    global intervaltext
+    global intervaltext, temp_quotes,quotes
 
     if state['screen'] == 'show_quotes':
 
         if intervals[intervalposition] != 0:
             if time.time() - state['lastquotetime'] > intervals[intervalposition]:
-                quote = random.choice(quotes)
+                print len(temp_quotes)
+                if len(temp_quotes) == 0 :
+                    print "fill it up again"
+                    temp_quotes = list(quotes)
+                    random.shuffle(temp_quotes) 
+                quote = temp_quotes.pop()
                 print_quote(quote['quote'])
                 state['lastquotetime'] = time.time()
             intervaltext = ("interval = %i seconds"% intervals[intervalposition])
@@ -142,18 +149,23 @@ def main():
         if state['list_screen_status'] == "list":
             #show list with all the quotes
             screen.fill(color=state['foregroundcolor'])
-            helpers.draw_menu(screen,menuitems_list, state['backgroundcolor'],state['foregroundcolor'])
+            helpers.draw_menu(screen,menuitems_list,state['foregroundcolor'], state['backgroundcolor'])
             
             if listposition >= 0:
-                screen.text(("-> %s" %quotes[listposition]['quote']) ,color='black',xy=(0,(helpers.screen_height()-25)/2), font_size=20,align='left')
+                screen.rectangle(xy=(0,(helpers.screen_height()-25)/2+25), size=(helpers.screen_width(),27), color=state['backgroundcolor'], align='left')
+                screen.text((" %s" %quotes[listposition]['quote']) ,color=state['foregroundcolor'],xy=(0,(helpers.screen_height()-25)/2+25), font_size=20,align='left')
             if listposition-1 >= 0:
-                screen.text(("   %s" %quotes[listposition-1]['quote']) ,color='black',xy=(0,(helpers.screen_height()-25)/2-25), font_size=20,align='left')
+                screen.text((" %s" %quotes[listposition-1]['quote']) ,color=state['backgroundcolor'],xy=(0,(helpers.screen_height()-25)/2-0), font_size=20,align='left')
             if listposition-2 >= 0:
-                screen.text(("   %s" %quotes[listposition-2]['quote']) ,color='black',xy=(0,(helpers.screen_height()-25)/2-50), font_size=20,align='left')
+                screen.text((" %s" %quotes[listposition-2]['quote']) ,color=state['backgroundcolor'],xy=(0,(helpers.screen_height()-25)/2-25), font_size=20,align='left')
+            if listposition-3 >= 0:
+                screen.text((" %s" %quotes[listposition-3]['quote']) ,color=state['backgroundcolor'],xy=(0,(helpers.screen_height()-25)/2-50), font_size=20,align='left')
             if listposition+1 < len(quotes):
-                screen.text(("   %s" %quotes[listposition+1]['quote']) ,color='black',xy=(0,(helpers.screen_height()-25)/2+25), font_size=20,align='left')
+                screen.text((" %s" %quotes[listposition+1]['quote']) ,color=state['backgroundcolor'],xy=(0,(helpers.screen_height()-25)/2+50), font_size=20,align='left')
             if listposition+2 < len(quotes):
-                screen.text(("   %s" %quotes[listposition+2]['quote']) ,color='black',xy=(0,(helpers.screen_height()-25)/2+50), font_size=20,align='left')
+                screen.text((" %s" %quotes[listposition+2]['quote']) ,color=state['backgroundcolor'],xy=(0,(helpers.screen_height()-25)/2+75), font_size=20,align='left')
+            if listposition+3 < len(quotes):
+                screen.text((" %s" %quotes[listposition+3]['quote']) ,color=state['backgroundcolor'],xy=(0,(helpers.screen_height()-25)/2+100), font_size=20,align='left')
 
 
 
