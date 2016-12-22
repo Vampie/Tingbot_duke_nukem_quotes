@@ -9,8 +9,17 @@ import helpers
 # setup code here
 state = {}
 state['lastquotetime'] = time.time()-100
-intervaltext = ""
 
+
+screen_list = {
+    0: 'show_quotes',
+    1: 'list_quotes'
+}
+current_screen = 0
+state['screen'] = screen_list[current_screen]
+
+ 
+intervaltext = ""
 #load quotes
 with open('duke_nukem_quotes.json') as json_data:
     quotes = json.load(json_data)
@@ -37,7 +46,8 @@ def print_quote(quote):
             
     screen.fill(color=state['backgroundcolor'])
     screen.text(quote,color=state['foregroundcolor'],font='GibonBold.otf',font_size=25)
-        
+    print(quote)
+    
     helpers.draw_menu(screen,menuitems, state['backgroundcolor'],state['foregroundcolor'])
 
 #buttons
@@ -49,6 +59,14 @@ def pause():
         intervalposition = 0
     else:
         intervalposition = previousintervalposition
+
+@left_button.press
+def switch_screen():
+    global current_screen
+    if current_screen == 1: current_screen = 0
+    else: current_screen = 1
+    state['screen'] = screen_list[current_screen]
+
     
 @midleft_button.press
 def slower():
@@ -79,17 +97,24 @@ def random_quote():
 def main():
     global intervaltext
     
-    if intervals[intervalposition] != 0:
-        if time.time() - state['lastquotetime'] > intervals[intervalposition]:
-            quote = random.choice(quotes)
-            print_quote(quote['quote'])
-            state['lastquotetime'] = time.time()
-        intervaltext = ("interval = %i seconds"% intervals[intervalposition])
-    else:
-        intervaltext = "Pause"
-        
-    screen.rectangle(xy=(0,helpers.screen_height()), size=(helpers.screen_width(),25), color=state['backgroundcolor'],align='bottomleft')
-    screen.text(intervaltext,color=state['foregroundcolor'],xy=(0,helpers.screen_height()), font_size=20,align='bottomleft')
-    #time.sleep(intervals[intervalposition])
+    if state['screen'] == 'show_quotes':
+    
+        if intervals[intervalposition] != 0:
+            if time.time() - state['lastquotetime'] > intervals[intervalposition]:
+                quote = random.choice(quotes)
+                print_quote(quote['quote'])
+                state['lastquotetime'] = time.time()
+            intervaltext = ("interval = %i seconds"% intervals[intervalposition])
+        else:
+            intervaltext = "Pause"
+            
+        screen.rectangle(xy=(0,helpers.screen_height()), size=(helpers.screen_width(),25), color=state['backgroundcolor'],align='bottomleft')
+        screen.text(intervaltext,color=state['foregroundcolor'],xy=(0,helpers.screen_height()), font_size=20,align='bottomleft')
+        #time.sleep(intervals[intervalposition])
+
+    if state['screen'] == 'list_quotes':
+        #show list with all the quotes
+        screen.fill(color=state['foregroundcolor'])
+
 
 tingbot.run()
