@@ -3,7 +3,8 @@
 
 _The quotes are not pulled online, but are in a json file._
 
-So you could easily replace that content with your own quotes
+So you could easily replace that content with your own quotes.
+Just resepect the format of the file. 
 
 -----
 
